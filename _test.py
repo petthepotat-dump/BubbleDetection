@@ -1,9 +1,10 @@
-
 import cv2
 import imutils
+import json
+from scripts import recognize
 
-GREEN1 = (55, 100, 60)
-GREEN2 = (75, 255, 255)
+GREEN1 = (65, 150, 100)
+GREEN2 = (80, 255, 255)
 
 """
 Steps:
@@ -47,9 +48,41 @@ Steps:
 
 # exit()
 
+data = json.load(open("config.json", "r"))
+POINTS = data["points"]
+
+# load data
+recognize.init(POINTS)
+
+# ------------------ find bubble ------------------ #
 
 # load assets/test.jpg
-img = cv2.imread('assets/clip1.jpg')
+img = cv2.imread("assets/clip2.jpg")
+
+r = recognize.get_abs_screen_coords(img.shape, POINTS).reshape((4, 2))
+output = recognize.four_point_transform(img, r)
+
+# hsv the image
+hsv = cv2.cvtColor(output, cv2.COLOR_BGR2HSV)
+# blur  hsv
+hsv = cv2.blur(hsv, (10, 10))
+# recognize.color_picker(hsv, 3)
+
+# filter out green
+mask = cv2.inRange(hsv, GREEN1, GREEN2)
+
+output = mask
+
+# scale up
+output = imutils.resize(output, height=800)
+
+# show image
+cv2.imshow("image", output)
+cv2.waitKey(0)
+
+#
+
+exit()
 
 img = imutils.resize(img, height=800)
 # blur frame
@@ -71,9 +104,9 @@ def mouse_position(event, x, y, flags, param):
 
 
 # show image
-cv2.imshow('image', hsv)
-cv2.setMouseCallback('image', mouse_position)
-cv2.imshow('edges', mask)
+cv2.imshow("image", hsv)
+cv2.setMouseCallback("image", mouse_position)
+cv2.imshow("edges", mask)
 # show hsv gray
 # cv2.imshow('hsv gray', hsv_gray)
 cv2.waitKey(0)
