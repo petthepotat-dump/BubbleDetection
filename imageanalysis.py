@@ -31,11 +31,23 @@ def get_first_video_frame(video_path):
     return frame
 
 
-frame = get_first_video_frame('assets/new.MOV')
-# resize frame to width = 700
-frame = imutils.resize(frame, width=1000)
-hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-cv2.namedWindow('frame')
-cv2.setMouseCallback('frame', mouse_position)
-cv2.imshow('frame', frame)
-cv2.waitKey(0)
+# frame = get_first_video_frame('assets/new.MOV')
+# # resize frame to width = 700
+# frame = imutils.resize(frame, width=1000)
+# hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+# cv2.namedWindow('frame')
+# cv2.setMouseCallback('frame', mouse_position)
+# cv2.imshow('frame', frame)
+# cv2.waitKey(0)
+
+import cv2
+img = get_first_video_frame('assets/real1.MOV')
+while(1):
+    cv2.imshow('img',img)
+    k = cv2.waitKey(33)
+    if k==27:    # Esc key to stop
+        break
+    elif k==-1:  # normally -1 returned,so don't print it
+        continue
+    else:
+        print(k) # else print its value

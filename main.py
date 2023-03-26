@@ -2,26 +2,37 @@ import cv2
 import imutils
 import json
 from scripts import recognize
+from scripts import config
 
+# ------------------ constants ------------------ #
 GREEN1 = (65, 150, 100)
 GREEN2 = (80, 255, 255)
 
+# ------------------ functions ------------------ #
 
 def get_first_video_frame(video_path):
     cap = cv2.VideoCapture(video_path)
-    if not cv2.isOpened():
+    if not cap.isOpened():
         print("Error opening video stream or file")
         return None
     ret, frame = cap.read()
     cap.release()
     return frame
 
-
-# get first frame and save
-# cv2.imwrite('assets/first.png', get_first_video_frame('assets/sample.mov'))
-
 # load video
-cap = cv2.VideoCapture("assets/new.mov")
+video_path = input("video path: ")
+OUTPUT = "results/" + input("project name? (no extensions please): ")
+
+# ------------------ configuration ------------------ #
+# get first frame + setup config
+
+_first = get_first_video_frame(video_path)
+if not config.configuration_handler(_first):
+    exit()
+
+# ------------------ setup ------------------ #
+
+cap = cv2.VideoCapture(video_path)
 
 # load data
 data = json.load(open("config.json", "r"))
@@ -63,7 +74,6 @@ initial_white_area = find_area(masked)
 
 # ------------------ file io ------------------ #
 
-OUTPUT = "results/" + input("project name? (no extensions please): ")
 # open file
 TFILEOUTPUT = open(f"{OUTPUT}-time", "w")
 AFILEOUTPUT = open(f"{OUTPUT}-area", "w")

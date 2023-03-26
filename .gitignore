@@ -1,2 +1,5 @@
 *.mov
 *.MOV
+
+.venv
+# __pycache__
