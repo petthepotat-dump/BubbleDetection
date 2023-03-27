@@ -78,6 +78,7 @@ initial_white_area = find_area(masked)
 TFILEOUTPUT = open(f"{OUTPUT}-time", "w")
 AFILEOUTPUT = open(f"{OUTPUT}-area", "w")
 LFILEOUTPUT = open(f"{OUTPUT}-length", "w")
+VFILEOUTPUT = open(f"{OUTPUT}-volume", "w")
 # data output type
 
 # ------------------ watch video + bubbles please  ------------------ #
@@ -93,11 +94,13 @@ while True:
     dif = initial_white_area - area if initial_white_area - area > 0 else 0
     area = dif / (DIA_TO_PIX**2) * REAL
     length = area / REAL
+    volume = length*(REAL/2)*3.14
     # file output
     TFILEOUTPUT.write(f"{cap.get(cv2.CAP_PROP_POS_MSEC)}\n")
     AFILEOUTPUT.write(f"{area}\n")
     LFILEOUTPUT.write(f"{length}\n")
-    print(dif, f"{area:4f}mm^2", f"{length:4f}mm", sep="\t")
+    VFILEOUTPUT.write(f"{volume}\n")
+    print(dif, f"{area:4f}mm^2", f"{length:4f}mm", f"{volume:4f}mm^3", sep="\t")
 
     output = mask
     # scale output up
@@ -110,3 +113,5 @@ while True:
 # close files
 TFILEOUTPUT.close()
 AFILEOUTPUT.close()
+LFILEOUTPUT.close()
+VFILEOUTPUT.close()
