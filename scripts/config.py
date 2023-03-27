@@ -115,6 +115,7 @@ def configuration_handler(image):
             height += 100
             image = imutils.resize(buf, height=height)
             change = True
+            dchange = True
             print("zoom")
 
         # save
